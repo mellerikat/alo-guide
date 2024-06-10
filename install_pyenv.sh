@@ -7,9 +7,9 @@ if command -v conda &> /dev/null; then
         conda deactivate
     fi
 fi
-# Anaconda 자동 init 취소
+# Cancel auto init for Anaconda
 conda config --set auto_activate_base false
-# 필요한 의존성 설치 (Ubuntu/Debian 기준)
+# Install necessary dependencies (for Ubuntu/Debian)
 
 if sudo -n true 2>/dev/null; then
     SUDO='sudo'
@@ -17,40 +17,40 @@ else
     SUDO=''
 fi
 
-# 설치할 패키지 목록입니다.
+# List of packages to be installed
 PACKAGES="make build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
 libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev git"
 
-# 패키지 업데이트 및 설치 명령을 실행합니다.
+# Execute package update and installation command
 $SUDO apt-get update
 $SUDO apt-get install -y $PACKAGES
 
-# pyenv 설치
+# Install pyenv
 if [ ! -d "${HOME}/.pyenv" ]; then
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 else
     echo "pyenv is already installed"
 fi
-# 환경 변수 설정 확인 및 추가
+# Check and add environment variable settings
 BASHRC=~/.bashrc
 PYENV_ROOT='export PYENV_ROOT="$HOME/.pyenv"'
 PATH_UPDATE='export PATH="$PYENV_ROOT/bin:$PATH:~/.local/bin"'
 INIT_COMMAND='eval "$(pyenv init --path)"'
 #VIRTUALENV_INIT='eval "$(pyenv virtualenv-init -)"'
-# PYENV_ROOT 추가
+# Add PYENV_ROOT
 if ! grep -Fxq "$PYENV_ROOT" $BASHRC; then
     echo $PYENV_ROOT >> $BASHRC
 fi
-# PATH 업데이트 추가
+# Add PATH update
 if ! grep -Fxq "$PATH_UPDATE" $BASHRC; then
     echo $PATH_UPDATE >> $BASHRC
 fi
-# pyenv init 추가
+# Add pyenv init
 if ! grep -Fxq "$INIT_COMMAND" $BASHRC; then
     echo $INIT_COMMAND >> $BASHRC
 fi
-# pyenv virtualenv-init 추가
+# Add pyenv virtualenv-init
 if ! grep -Fxq "$VIRTUALENV_INIT" $BASHRC; then
     echo $VIRTUALENV_INIT >> $BASHRC
 fi
